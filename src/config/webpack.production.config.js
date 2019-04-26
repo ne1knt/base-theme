@@ -38,7 +38,7 @@ const fallbackRoot = path.resolve(magentoRoot, 'vendor', 'scandipwa', 'source');
 
 const publicPath = '/static/frontend/Scandiweb/pwa/en_US/Magento_Theme/';
 
-module.exports = {
+const browserConfig = {
     resolve: {
         extensions: [
             '.js',
@@ -48,15 +48,15 @@ module.exports = {
         ]
     },
 
+    target: 'web',
+
     cache: false,
 
     stats: {
         warnings: false
     },
 
-    entry: [
-        path.resolve(projectRoot, 'src', 'app', 'index.js')
-    ],
+    entry: [path.resolve(projectRoot, 'src', 'app', 'index.js')],
 
     module: {
         rules: [
@@ -169,3 +169,109 @@ module.exports = {
         })
     ]
 };
+
+
+const serverConfig = {
+    resolve: {
+        extensions: [
+            '.js',
+            '.jsx',
+            '.scss',
+            '*'
+        ]
+    },
+
+    target: 'node',
+
+    cache: false,
+
+    stats: {
+        warnings: false
+    },
+
+    entry: [
+        path.resolve(projectRoot, 'src', 'server', 'index.js')
+    ],
+
+    module: {
+        rules: [
+            {
+                test: /\.(js|jsx)$/,
+                exclude: /(node_modules)/,
+                use: [
+                    {
+                        loader: 'babel-loader',
+                        options: BabelConfig
+                    }
+                ]
+            },
+            {
+                test: /\.(sa|sc|c)ss$/,
+                use: [
+                    'css-hot-loader',
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: () => [autoprefixer]
+                        }
+                    },
+                    'sass-loader',
+                    {
+                        loader: 'sass-resources-loader',
+                        options: {
+                            resources: path.resolve(projectRoot, 'src', 'app', 'style', 'abstract', '_abstract.scss')
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.(jpe?g|png|gif|svg)$/,
+                use: [
+                    {
+                        loader: 'url-loader'
+                    }
+                ]
+            }
+        ]
+    },
+
+    output: {
+        filename: 'bundle.js',
+        chunkFilename: '[name].chunk.js',
+        path: path.resolve(projectRoot, 'Magento_Theme', 'server'),
+        pathinfo: true,
+        publicPath
+    },
+
+    plugins: [
+        new InjectManifest({
+            swSrc: path.resolve(publicRoot, 'sw-compiled.js'),
+            swDest: path.resolve(publicRoot, 'sw.js'),
+            exclude: [/\.phtml/]
+        }),
+
+        new WebpackPwaManifest(WebmanifestConfig(projectRoot)),
+
+        new webpack.DefinePlugin({
+            'process.env': {
+                REBEM_MOD_DELIM: JSON.stringify('_'),
+                REBEM_ELEM_DELIM: JSON.stringify('-')
+            }
+        }),
+
+        new MiniCssExtractPlugin(),
+
+        new OptimizeCssAssetsPlugin(),
+
+        new MinifyPlugin({
+            removeConsole: true,
+            removeDebugger: true
+        }, {
+            comments: false
+        })
+    ]
+};
+
+module.exports = [browserConfig, serverConfig]

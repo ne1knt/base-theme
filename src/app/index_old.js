@@ -9,9 +9,11 @@
  * @link https://github.com/scandipwa/base-theme
  */
 
-import React from 'react';
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
+import AppRouter from 'Route';
+import store from 'Store';
 import ReactDOM from 'react-dom';
-import App from './App';
 import 'Style/main';
 
 // Disable react dev tools in production
@@ -29,4 +31,14 @@ if (process.env.NODE_ENV === 'development') {
     });
 }
 
-ReactDOM.hydrate(<App />, document.getElementById('root'));
+class App extends Component {
+    render() {
+        return (
+            <Provider store={ store }>
+                <AppRouter />
+            </Provider>
+        );
+    }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));

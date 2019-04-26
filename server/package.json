@@ -1,0 +1,36 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack --config ./webpack.config.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "clean-webpack-plugin": "^2.0.1",
+    "express": "^4.16.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "webpack": "^4.28.0",
+    "webpack-cli": "^3.1.2",
+    "babel-cli": "^6.26.0",
+    "babel-loader": "^8.0.4",
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.4.0",
+    "babel-plugin-transform-replace-object-assign": "^2.0.0",
+    "babel-plugin-transform-rebem-jsx": "^0.3.3",
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "babel-plugin-module-resolver": "^3.1.1",
+    "babel-minify-webpack-plugin": "^0.3.1",
+    "babel-plugin-console-source": "^2.0.1",
+    "babel-preset-airbnb": "^3.2.0"
+  }
+}
